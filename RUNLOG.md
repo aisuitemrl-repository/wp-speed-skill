@@ -100,3 +100,23 @@ Entry format:
 **Pending (needs user, in wp-admin):** confirm Smush > Bulk Smush status and whether Local WebP is on. Nothing is applied until approved.
 
 **Next:** scheduled re-check in 60 minutes.
+
+---
+
+## 2026-11-23 14:14 UTC · philipsaccessories.in · second scheduled WebP re-check
+
+**Action:** Read-only re-test by Claude (scheduled task `trig_01N4v7LCjBMxgn84TN3vjqeN`). Nothing changed on the live site.
+
+**Result:**
+- `SWV5531-01-2048x2048.jpg`: 111,817 B, `image/jpeg` for both plain and WebP-capable requests. Unchanged since 11:x UTC.
+- No `.webp` copy exists (both `.jpg.webp` and `.webp` naming return 404).
+- Homepage: HTTP 200, 0.60 s.
+
+**Interpretation:** Still no served WebP after two checks. The run is either not finished or Local WebP is not enabled. Neither can be checked through the REST API.
+
+**Decision:** Per the task, stopped re-checking. No further automatic checks are scheduled for WebP.
+
+**Pending (user, in wp-admin):**
+1. Smush > Bulk Smush: is the run finished, and how many images are done?
+2. Smush > Local WebP: is it on?
+3. If it's on and the run is done but the images are still not served, that points to the host's rewrite rules for Nginx (see the Converter for Media error earlier). Ask Nestify.
