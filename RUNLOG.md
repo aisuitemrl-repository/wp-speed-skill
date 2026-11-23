@@ -81,3 +81,22 @@ Entry format:
 5. Plugin and theme updates, one at a time, after a Nestify backup.
 6. Element Manager widget scan (optional).
 7. Re-run Lighthouse and the admin baselines after each change.
+
+---
+
+## 2026-11-23 13:06 UTC · philipsaccessories.in · scheduled WebP re-check
+
+**Action:** Read-only re-test by Claude (scheduled task `trig_01Q8K1aQog3TFaCjEPWNCFhL`). Nothing changed on the live site.
+
+**Result:**
+- Test image `SWV5531-01-2048x2048.jpg`: 111,817 B, `image/jpeg` for both plain and WebP-capable requests. Unchanged.
+- Test image `Charger-1024x402.png`: 58,556 B, `image/png` for both requests. Unchanged.
+- No `.webp` copy exists for the test image (both `.jpg.webp` and `.webp` naming return 404).
+- Homepage: HTTP 200, 617,893 B, 1.34 s (earlier 1.10 to 2.23 s; within normal variation).
+- Smush Pro (`wp-smush-pro/wp-smush`): active, version 3.16.9.
+
+**Interpretation:** Smush bulk conversion has not produced serving-ready WebP files yet, or Local WebP is not enabled, or the run is still in progress. The REST API cannot show Smush's bulk progress or the Local WebP toggle, so this can't be told apart from here.
+
+**Pending (needs user, in wp-admin):** confirm Smush > Bulk Smush status and whether Local WebP is on. Nothing is applied until approved.
+
+**Next:** scheduled re-check in 60 minutes.
