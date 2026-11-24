@@ -166,3 +166,17 @@ Entry format:
 3. Ask Nestify for the server's load and resource history for the time of the Smush overload, and for their recommended way to run Smush on this plan.
 
 **Status of Smush on this site:** 12 of the 289 used-image IDs are already smushed (133, 504, 505, 5476, 6204, 6461, 7577, 7581, 7607, 7690, 7782, 7866). 276 are queued in `run_queue.txt`, none processed.
+
+---
+
+## 2026-11-24 · philipsaccessories.in · Bulk Smush restarted by user (against the pause)
+
+**Observed (user screenshot):** Smush dashboard shows Bulk Smush running on the whole library at 18% (182 of 965 images), started by the user after the pause. Dashboard also shows 1,053 images smushed, 34.1 MB saved (60.0%), Smush mode Super, Local WebP-related bulk conversion active.
+
+**Action requested:** user to click CANCEL on the Bulk Smush progress bar immediately.
+
+**Claude's check after the restart:** homepage HTTP 200, TTFB 1.12 s then 0.33 s, total 2.40 s then 0.58 s. Not down, but the bulk job is still adding server load until cancelled.
+
+**Open points:**
+1. The dashboard's 1,053 "images smushed" conflicts with the list-view statuses (many used images show "Not processed"). Possible explanation: Smush counts attachment files and sizes differently from list rows, or an earlier bulk run covered most of the library. Needs a check of the Smush dashboard after cancel.
+2. Bulk Smush is the operation that overloaded the server. It stays off until Nestify confirms the server can take it.
