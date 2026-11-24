@@ -180,3 +180,22 @@ Entry format:
 **Open points:**
 1. The dashboard's 1,053 "images smushed" conflicts with the list-view statuses (many used images show "Not processed"). Possible explanation: Smush counts attachment files and sizes differently from list rows, or an earlier bulk run covered most of the library. Needs a check of the Smush dashboard after cancel.
 2. Bulk Smush is the operation that overloaded the server. It stays off until Nestify confirms the server can take it.
+
+---
+
+## 2026-11-24 08:41 UTC · philipsaccessories.in · monitoring check during Bulk Smush (user let it run)
+
+| Page | Try | HTTP | TTFB | Total |
+|---|---|---|---|---|
+| Homepage | 1 | 200 | 1.16 s | 2.44 s |
+| Homepage | 2 | 200 | 0.34 s | 0.59 s |
+| Homepage | 3 | 200 | 0.34 s | 0.35 s |
+| wp-login.php | 1 | 200 | 16.64 s | 16.89 s |
+| wp-login.php | 2 | 200 | 5.69 s | 5.95 s |
+| wp-login.php | 3 | 200 | 7.40 s | 7.65 s |
+
+**Stop rule triggered:** wp-login.php took over 5 s on three consecutive tries (threshold: two). Advised the user to CANCEL the bulk run immediately. Homepage still fast, no 5xx or timeouts.
+
+**Smush progress:** not visible via REST. Plugin status check returned HTTP 200.
+
+**Pending:** user to confirm the cancel and report Smush's progress count.
