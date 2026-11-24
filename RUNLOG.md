@@ -146,3 +146,23 @@ Entry format:
 **Plan:** a Chrome prompt with all 289 IDs, batches of 20, a 3 s pause between images, a homepage check after each batch, and a stop on any error. Pending: the user runs it from the desktop app's Chrome connection (not yet working).
 
 **Pending user approval:** running the Chrome batch (it changes the live site's attachments).
+
+---
+
+## 2026-11-24 · philipsaccessories.in · single-image Smush test (ID 506): stopped
+
+**Action:** user, in Chrome, read-only checks plus two clicks on the Smush link for `Image-post-4.jpg` (ID 506) in Media > Library List view.
+
+**Result:**
+- The Smush link is a `#` link handled by the page's script. Neither click started anything. No request reached the server, and the status stayed "Not processed".
+- The homepage took about 21.7 s to finish loading in a new tab (server started responding after 3.4 s). No 502/503 errors.
+- Claude's own measurements afterwards: homepage HTTP 200, TTFB 1.14 s then 0.32 s, total 2.34 s then 0.34 to 0.56 s. wp-admin login page 2.49 s.
+
+**Decision:** pause all Smush work on this site. No batch run until the list-page Smush link works and a slow homepage load has an explanation.
+
+**Open questions:**
+1. Why the list-page Smush link is dead: a stuck page script, a plugin conflict, or Smush's own JavaScript failing on this page. A reload of the page may help. Untested.
+2. Why the browser saw a 21.7 s load while the server responded in 0.3 to 0.6 s afterwards. Candidates: a slow first request after the overload, or Nestify's CDN or cache state.
+3. Ask Nestify for the server's load and resource history for the time of the Smush overload, and for their recommended way to run Smush on this plan.
+
+**Status of Smush on this site:** 12 of the 289 used-image IDs are already smushed (133, 504, 505, 5476, 6204, 6461, 7577, 7581, 7607, 7690, 7782, 7866). 276 are queued in `run_queue.txt`, none processed.
