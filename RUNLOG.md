@@ -120,3 +120,29 @@ Entry format:
 1. Smush > Bulk Smush: is the run finished, and how many images are done?
 2. Smush > Local WebP: is it on?
 3. If it's on and the run is done but the images are still not served, that points to the host's rewrite rules for Nginx (see the Converter for Media error earlier). Ask Nestify.
+
+---
+
+## 2026-11-24 · philipsaccessories.in · Smush scoped to used images
+
+**Incident:** Bulk Smush overloaded the server and took the sites down. The user stopped it. Both sites recovered; the homepage was at about 2.3 s afterwards, against 0.6 s before.
+
+**Cause:** the bulk run worked through all 1,067 Media Library items, most of them unattached and unused.
+
+**Decision:** process only images that live pages actually use, one attachment at a time, in batches, with a site check after each batch. Bulk Smush is not used.
+
+**Finding:** Media Library bulk actions contain only Delete. Smush's per-image actions are in the Smush column (**Smush | Ignore**). Smush's Smush filter has four views: All images, Not processed, Bulk ignored, Failed Processing.
+
+**Used-image list:**
+- Crawled 95 public pages from the sitemaps (read-only).
+- 432 unique image files found on those pages. 336 matched to a Media Library item by file name; 96 did not (mostly Amazon-hosted `_SL1500_` images and a few older files, not in the Media Library).
+- Those 336 file names correspond to **289 unique Media IDs**. Saved to `used_media_ids.txt`, with the file names in `used_image_files.txt` and the pages in `pages_crawled.txt`.
+- **Correction:** the commit message for `a49e5b6` says 336. The correct count is 289 IDs (336 file names).
+
+**Media library fact:** `/wp-json/wp/v2/media` reports 1,067 items, but the crawl fetched 895 (page 11 kept returning an error). The matching is therefore incomplete. Re-check the missing items if needed.
+
+**WhatsApp-named files:** only one used file has a WhatsApp name: `WhatsApp-Image-2026-11-11-at-4.10.31-PM.jpeg`. Recommendation: keep the URL, and set its title and alt text. Renaming live files breaks URLs and Elementor references, so don't rename them.
+
+**Plan:** a Chrome prompt with all 289 IDs, batches of 20, a 3 s pause between images, a homepage check after each batch, and a stop on any error. Pending: the user runs it from the desktop app's Chrome connection (not yet working).
+
+**Pending user approval:** running the Chrome batch (it changes the live site's attachments).
